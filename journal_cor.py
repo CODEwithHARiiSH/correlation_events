@@ -1,5 +1,9 @@
 import json
 
+def get_data(filename):         #open journal
+    with open(filename , 'r') as file:
+        return json.load(file)
+
 """
      n₁₁ is the number of times x and y were both True
      n₀₀ is the number of times x and y were both False
@@ -37,10 +41,16 @@ def calculate_correlation(data, event):
 
 
 def main():
-    with open('journal.json', 'r') as file:
-        data = json.load(file)
-    events_list = set(event for entry in data for event in entry['events'])
-    correlation_results = {}
+
+    filename = "journal.json"
+    data = get_data(filename)
+    
+    events_list = set()              #for get the events
+    for entry in data:
+        for event in entry["events"]:
+            events_list.add(event)
+            
+    correlation_results = {}               #calculate correlation between data and events
     for event in events_list:
         correlation = calculate_correlation(data, event)
         correlation_results[event] = correlation
